@@ -23,7 +23,9 @@ class SearchBar extends Component {
     }
 
     componentDidMount() {
-        fetch('http://192.168.0.13:9999/access_token', {mode: 'cors'})
+        var urlProd = "https://blooming-escarpment-43988.herokuapp.com/access_token";
+        var urlDev = 'http://192.168.0.13:9999/access_token';
+        fetch(urlProd, {mode: 'cors'})
             .then((response) => {
                 return response.json();
             }).then((data) => {
