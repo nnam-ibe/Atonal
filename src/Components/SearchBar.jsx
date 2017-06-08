@@ -23,20 +23,20 @@ class SearchBar extends Component {
     }
 
     componentDidMount() {
-        var urlProd = "https://blooming-escarpment-43988.herokuapp.com/access_token";
-        var urlDev = 'http://192.168.0.13:9999/access_token';
-        fetch(urlProd, {mode: 'cors'})
-            .then((response) => {
-                return response.json();
-            }).then((data) => {
-                spotifyApi = new SpotifyWebApi({
-                    accessToken: data.access_token
-                });
-                console.log(data.access_token);
-            });
-        // spotifyApi = new SpotifyWebApi({
-        //     accessToken: 'BQDMhQdxh7s7xEO9upYCrNqJCyrEuN_Nbp8QlmKNp6ZAYot7AEzquDuqSCDiq01f_I19MokYFSrrwKHqOrRotg'
-        // });
+        // var urlProd = "https://blooming-escarpment-43988.herokuapp.com/access_token";
+        // var urlDev = 'http://192.168.0.13:9999/access_token';
+        // fetch(urlProd, {mode: 'cors'})
+        //     .then((response) => {
+        //         return response.json();
+        //     }).then((data) => {
+        //         spotifyApi = new SpotifyWebApi({
+        //             accessToken: data.access_token
+        //         });
+        //         console.log(data.access_token);
+        //     });
+        spotifyApi = new SpotifyWebApi({
+            accessToken: 'BQBTzXcZTmDJH2HMAvia5qrNlugV6nTHwVCupCYE3ApKnfPZLeZ17qqqsJoDjouMeio23croZA8wKigjCoSj-Q'
+        });
     }
 
     render() {
@@ -50,19 +50,10 @@ class SearchBar extends Component {
                   anchorEl={this.state.anchorEl}
                   onRequestClose={this.handleRequestClose}
                   canAutoPosition={false}
+                  useLayerForClickAway={true}
               >
                   <List>
-                      {
-                          _.map(this.state.artists, (artist) => {
-                              return (
-                                  <ListItem
-                                      key = {artist.key}
-                                      leftAvatar={<Avatar src={artist.url} />}
-                                      primaryText={artist.name}
-                                  />
-                              );
-                          })
-                      }
+                      {this.state.data}
                   </List>
               </Popover>
           </div>
@@ -85,7 +76,6 @@ class SearchBar extends Component {
                     this.searchArtists(newValue);
                     break;
             }
-
             this.setState({
                 open: true,
                 query: newValue,
@@ -94,6 +84,10 @@ class SearchBar extends Component {
         } else {
             this.setState({open: false, query: ''})
         }
+    };
+
+    handleRequestClose = () => {
+        this.setState({ open: false });
     };
 
     searchArtists(value) {
@@ -105,16 +99,17 @@ class SearchBar extends Component {
                     if (artist.images.length !== 0) {
                         img = artist.images[0].url;
                     }
-
-                    return {
-                        key: artist.id,
-                        name: artist.name,
-                        url: img
-                    };
+                     return (
+                        <ListItem
+                            key={artist.id}
+                            leftAvatar={<Avatar src={img} />}
+                            primaryText={artist.name}
+                        />
+                    );
                 });
 
                 this.setState({
-                    artists: results
+                    data: results
                 });
             }, function (err) {
                 console.error(err);
@@ -125,6 +120,9 @@ class SearchBar extends Component {
         spotifyApi.searchAlbums(value).then((data) => {
             console.log(`Search for Album: ${value}`, data);
             // var result = _.map(data.body.a)
+            this.setState({
+                data: []
+            });
         });
     }
 
@@ -133,7 +131,14 @@ class SearchBar extends Component {
             .then((data) => {
                 console.log(`Search for Tracks: ${value}`, data);
                 var results = _.map(data.body.tracks.items, (track) => {
-                    return track.name;
+                    var secondaryText = Object.values(track.artists).map((k)=>{return k.name}).join(', ');
+                    return (
+                        <ListItem
+                            key={track.key}
+                            primaryText={track.name}
+                            secondaryText={secondaryText}
+                        />
+                    );
                 });
 
                 this.setState({
