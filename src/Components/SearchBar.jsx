@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import {AutoComplete} from 'material-ui'
+import Avatar from 'material-ui/Avatar';
+import Popover from 'material-ui/Popover';
+import TextField from 'material-ui/TextField';
+import {List, ListItem} from 'material-ui/List';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import _ from 'lodash';
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -14,74 +17,102 @@ class SearchBar extends Component {
 
         this.state = {
             data: [],
+            open: false,
+            query: ''
         };
-
-        this.handleUpdateInput = this.handleUpdateInput.bind(this);
     }
 
     componentDidMount() {
-        // fetch('http://192.168.0.13:9999/access_token', {mode: 'cors'})
-        //     .then((response) => {
-        //         return response.json();
-        //     }).then((data) => {
-        //         spotifyApi = new SpotifyWebApi({
-        //             accessToken: data.access_token
-        //         });
-        //         console.log(data.access_token);
-        //     });
-
-        spotifyApi = new SpotifyWebApi({
-            accessToken: 'BQDCJQMfY19dC350oh4aa2qFukclTrkai5p6pGZA0zqIN7LQc-3cGB7GcUHcqUVpU-kJMOblK_RwY20RAgnZkQ'
-        });
+        fetch('http://192.168.0.13:9999/access_token', {mode: 'cors'})
+            .then((response) => {
+                return response.json();
+            }).then((data) => {
+                spotifyApi = new SpotifyWebApi({
+                    accessToken: data.access_token
+                });
+                console.log(data.access_token);
+            });
+        // spotifyApi = new SpotifyWebApi({
+        //     accessToken: 'BQDMhQdxh7s7xEO9upYCrNqJCyrEuN_Nbp8QlmKNp6ZAYot7AEzquDuqSCDiq01f_I19MokYFSrrwKHqOrRotg'
+        // });
     }
 
     render() {
         return (
-            <AutoComplete
-                hintText="Search for an artist.."
-                dataSource    = {this.state.data}
-                filter={AutoComplete.noFilter}
-                onUpdateInput = {this.handleUpdateInput}
-            />
+          <div>
+              <TextField
+              hintText="Search"
+              onChange={this.handleTextChange}/>
+              <Popover
+                  open={this.state.open}
+                  anchorEl={this.state.anchorEl}
+                  onRequestClose={this.handleRequestClose}
+                  canAutoPosition={false}
+              >
+                  <List>
+                      {
+                          _.map(this.state.artists, (artist) => {
+                              return (
+                                  <ListItem
+                                      key = {artist.key}
+                                      leftAvatar={<Avatar src={artist.url} />}
+                                      primaryText={artist.name}
+                                  />
+                              );
+                          })
+                      }
+                  </List>
+              </Popover>
+          </div>
         );
     }
 
-    handleUpdateInput(value) {
-        if (value === '') {
+    handleTextChange = (event, newValue) => {
+        if (newValue.length > 0) {
+            switch (this.props.activeType) {
+                case 1:
+                    this.searchArtists(newValue);
+                    break;
+                case 2:
+                    this.searchAlbums(newValue);
+                    break;
+                case 3:
+                    this.searchTracks(newValue);
+                    break;
+                default:
+                    this.searchArtists(newValue);
+                    break;
+            }
+
             this.setState({
-                data: []
+                open: true,
+                query: newValue,
+                anchorEl: event.currentTarget
             });
-            return;
+        } else {
+            this.setState({open: false, query: ''})
         }
-
-        switch (this.props.activeType) {
-            case 1:
-                this.searchArtists(value);
-                break;
-            case 2:
-                this.searchAlbums(value);
-                break;
-            case 3:
-                this.searchTracks(value);
-                break;
-            default:
-                this.searchArtists(value);
-                break;
-        }
-
-
-    }
+    };
 
     searchArtists(value) {
         spotifyApi.searchArtists(value)
             .then((data) => {
                 console.log(`Search for ${value}`, data);
                 var results = _.map(data.body.artists.items, (artist) => {
-                    return artist.name;
+                    var img ='';
+                    if (artist.images.length !== 0) {
+                        img = artist.images[0].url;
+                    }
+
+                    return {
+                        key: artist.id,
+                        name: artist.name,
+                        url: img
+                    };
                 });
 
                 this.setState({
-                    data: results
+                    artists: results
                 });
             }, function (err) {
                 console.error(err);

@@ -17,7 +17,7 @@ app.set('port', (process.env.PORT || 9999));
 app.use(cors());
 app.use(express.static(__dirname + '/build'));
 
-app.get('/index.html', function(request, response) {
+app.get('/', function(request, response) {
     response.sendFile(__dirname + '/build/index.html')
 });
 

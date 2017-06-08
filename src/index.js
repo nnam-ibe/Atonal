@@ -18,6 +18,7 @@ class App extends Component {
                     </div>
                     <AppToolbar />
                     <div className="app-body">
+
                     </div>
                 </div>
             </MuiThemeProvider>
