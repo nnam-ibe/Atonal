@@ -12,6 +12,8 @@ var spotifyApi = new SpotifyWebApi({
     clientSecret : clientSecret
 });
 
+process.env.NODE_ENV = 'ddevelopment';
+
 app.set('port', (process.env.PORT || 9999));
 
 app.use(cors());

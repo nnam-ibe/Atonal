@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Avatar from 'material-ui/Avatar';
 import Popover from 'material-ui/Popover';
 import TextField from 'material-ui/TextField';
 import {List, ListItem} from 'material-ui/List';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import _ from 'lodash';
-var SpotifyWebApi = require('spotify-web-api-node');
-injectTapEventPlugin();
+import {spotifyApi} from '../index'
 
-var spotifyApi;
 
 class SearchBar extends Component {
 
@@ -20,23 +18,6 @@ class SearchBar extends Component {
             open: false,
             query: ''
         };
-    }
-
-    componentDidMount() {
-        // var urlProd = "https://blooming-escarpment-43988.herokuapp.com/access_token";
-        // var urlDev = 'http://192.168.0.13:9999/access_token';
-        // fetch(urlProd, {mode: 'cors'})
-        //     .then((response) => {
-        //         return response.json();
-        //     }).then((data) => {
-        //         spotifyApi = new SpotifyWebApi({
-        //             accessToken: data.access_token
-        //         });
-        //         console.log(data.access_token);
-        //     });
-        spotifyApi = new SpotifyWebApi({
-            accessToken: 'BQBTzXcZTmDJH2HMAvia5qrNlugV6nTHwVCupCYE3ApKnfPZLeZ17qqqsJoDjouMeio23croZA8wKigjCoSj-Q'
-        });
     }
 
     render() {
@@ -100,11 +81,14 @@ class SearchBar extends Component {
                         img = artist.images[0].url;
                     }
                      return (
-                        <ListItem
-                            key={artist.id}
-                            leftAvatar={<Avatar src={img} />}
-                            primaryText={artist.name}
-                        />
+                         <Link to={`/a/${artist.id}`}>
+                             <ListItem
+                                 key={artist.id}
+                                 leftAvatar={<Avatar src={img} />}
+                                 primaryText={artist.name}
+                                 onClick={ () => {this.setState( {open: false} )} }
+                             />
+                         </Link>
                     );
                 });
 
