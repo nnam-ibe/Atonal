@@ -1,3 +1,4 @@
+/* Application Wide Components */
 .app-toolbar {
     background-color: #4DB6AC !important;
 }
@@ -10,4 +11,48 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+}
+
+.artist-component {
+    position: relative;
+}
+
+/* Artist Component */
+.artist-header {
+    align-self: center;
+    align-items: center;
+    background-size: cover;
+    background-position: 50%;
+    display: block;
+    box-sizing: border-box;
+}
+
+.artist-header:before {
+    content: '';
+    position: absolute;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(transparent -30%,#181818);
+}
+
+.followers {
+    padding-top: 100px;
+    font-size: .8em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    text-align: center;
+    margin-bottom: 1em;
+    color: #FFFFFF;
+}
+
+.artist-name {
+    font-size: 4em;
+    margin: auto;
+    display: block;
+    text-align: center;
+    height: auto;
+    color: #FFFFFF;
 }
