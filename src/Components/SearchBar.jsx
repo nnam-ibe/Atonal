@@ -3,10 +3,20 @@ import { Link } from 'react-router-dom';
 import Avatar from 'material-ui/Avatar';
 import Popover from 'material-ui/Popover';
 import TextField from 'material-ui/TextField';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import _ from 'lodash';
-import {spotifyApi} from '../index'
+import { spotifyApi } from '../index'
 
+export const activeType = Object.freeze({
+    ARTIST: 0,
+    ALBUMS: 1,
+    TRACKS: 2
+});
+
+export const searchMode = Object.freeze({
+    LOOKUP: 0,
+    COMPARE: 1
+});
 
 class SearchBar extends Component {
 
@@ -24,7 +34,7 @@ class SearchBar extends Component {
         return (
           <div>
               <TextField
-              hintText="Search"
+              hintText={this.props.searchMode === searchMode.LOOKUP ? "Search..." : "Compare to.." }
               onChange={this.handleTextChange}/>
               <Popover
                   open={this.state.open}
@@ -44,13 +54,13 @@ class SearchBar extends Component {
     handleTextChange = (event, newValue) => {
         if (newValue.length > 0) {
             switch (this.props.activeType) {
-                case 1:
+                case activeType.ARTIST:
                     this.searchArtists(newValue);
                     break;
-                case 2:
+                case activeType.ALBUMS:
                     this.searchAlbums(newValue);
                     break;
-                case 3:
+                case activeType.TRACKS:
                     this.searchTracks(newValue);
                     break;
                 default:
@@ -80,16 +90,29 @@ class SearchBar extends Component {
                     if (artist.images.length !== 0) {
                         img = artist.images[0].url;
                     }
-                     return (
-                         <Link to={`/a/${artist.id}`}>
-                             <ListItem
-                                 key={artist.id}
-                                 leftAvatar={<Avatar src={img} />}
-                                 primaryText={artist.name}
-                                 onClick={ () => {this.setState( {open: false} )} }
-                             />
-                         </Link>
+
+                    var listItem = (
+                        <ListItem
+                            key={artist.id}
+                            leftAvatar={<Avatar src={img} />}
+                            primaryText={artist.name}
+                            onClick={ () => {this.setState( {open: false} )} }
+                        />
                     );
+
+                    if (this.props.searchMode === searchMode.LOOKUP) {
+                        return (
+                            <Link to={`/a/${artist.id}`}>
+                                {listItem}
+                            </Link>
+                        );
+                    } else {
+                        return (
+                            <Link to={`/compare/${this.props.artist1}/${artist.id}`}>
+                                {listItem}
+                            </Link>
+                        );
+                    }
                 });
 
                 this.setState({

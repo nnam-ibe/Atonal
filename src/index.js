@@ -8,12 +8,13 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import AppToolbar from './Components/AppToolbar';
 import Artist from './Components/Artist';
-import './App.css';
+import Compare from './Components/Compare'
+import './App.css'
 import registerServiceWorker from './registerServiceWorker';
 var SpotifyWebApi = require('spotify-web-api-node');
 
-export var spotifyApi;
 const history = createHistory();
+export var spotifyApi;
 
 class App extends Component {
 
@@ -27,6 +28,7 @@ class App extends Component {
                         </div>
                         <div className="app-body">
                             <Route path="/a/:artistId" component={Artist}/>
+                            <Route path="/compare/:artist1/:artist2" component={Compare}/>
                         </div>
                     </div>
                 </MuiThemeProvider>
@@ -35,16 +37,14 @@ class App extends Component {
     }
 
     componentWillMount() {
-        var url = 'https://blooming-escarpment-43988.herokuapp.com/access_token';
+        var url = 'http://192.168.0.14:9999/access_token';
         if (process.env.NODE_ENV === 'production') {
             url = 'https://blooming-escarpment-43988.herokuapp.com/access_token';
-        } else if (process.env.NODE_ENV === 'ddevelopment') {
-            url = 'http://192.168.0.13:9999/access_token'
         }
 
         if (process.env.NODE_ENV === 'development') {
             spotifyApi = new SpotifyWebApi({
-                accessToken: 'BQA0I_n3Px3L98QiwP_6fS2esqMzgx5sqjwpAmZQ35q-kLWiC2kYXHDSk88XAXd2Uaww38IVHiWOH4g-60YwkA'
+                accessToken: 'BQDja-fbcICNwKHTWEB6zjyd2bwy_uAjhdBdMmlU1RRGaAnETRQDgwhMtMEBEf5eoA-uLwCWYnzgBXcYd4Ymtg'
             });
         } else{
             fetch(url, {mode: 'cors'})
@@ -54,7 +54,7 @@ class App extends Component {
                 spotifyApi = new SpotifyWebApi({
                     accessToken: data.access_token
                 });
-                console.log(data.access_token);
+                console.log(data.access_token); //TODO: Remove console log
             });
         }
     }

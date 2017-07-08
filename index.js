@@ -3,13 +3,11 @@ var app = express();
 var http = require("http");
 var cors = require('cors');
 var SpotifyWebApi = require("spotify-web-api-node");
-
-var clientId = '2090e611a524487b96612f2e97abeec2',
-    clientSecret = '2e9f55f61da149799e94695e25728f92';
+var config = require('./spotifyConfig');
 
 var spotifyApi = new SpotifyWebApi({
-    clientId : clientId,
-    clientSecret : clientSecret
+    clientId : config.clientId,
+    clientSecret : config.clientSecret
 });
 
 process.env.NODE_ENV = 'ddevelopment';

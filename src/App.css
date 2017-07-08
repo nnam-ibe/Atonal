@@ -13,18 +13,18 @@ body {
     font-family: sans-serif;
 }
 
-.artist-component {
+.artist-component-header {
     position: relative;
 }
 
 /* Artist Component */
 .artist-header {
     align-self: center;
-    align-items: center;
+    text-align: center;
     background-size: cover;
-    background-position: 50%;
+    background-position: 20%;
     display: block;
-    box-sizing: border-box;
+    padding: 20px;
 }
 
 .artist-header:before {
@@ -48,6 +48,10 @@ body {
     color: #FFFFFF;
 }
 
+.followers::after {
+    content: ' Followers';
+}
+
 .artist-name {
     font-size: 4em;
     margin: auto;
@@ -55,4 +59,64 @@ body {
     text-align: center;
     height: auto;
     color: #FFFFFF;
+}
+
+.artist-compare-btn {
+    display: block;
+    padding-top: 20px;
+}
+
+.top-tracks-header {
+    padding-top: 20px;
+    margin-left: 88px;
+    margin-right: 88px;
+    margin-bottom: 20px;
+    font-size: 2em;
+    font-weight: 600;
+    text-align: center;
+}
+
+.top-tracks-list {
+    display: block;
+}
+
+.top-tracks-list:before {
+    display: table;
+}
+
+.track-row {
+    height: 2em;
+}
+
+.track-name {
+    height: 2em;
+    text-overflow: ellipsis;
+}
+
+.track-item-div {
+    display: inline;
+    padding: 20px;
+}
+
+
+/*Compare Component*/
+.compare-header {
+    text-align: left;
+    display: flex;
+    height: 240px;
+}
+
+.compare-artist1 {
+    background-size: cover;
+    width: 50%;
+    height: 100%;
+    background-position: 0 -100px;
+
+}
+
+.compare-artist2 {
+    background-size: cover;
+    width: 50%;
+    height: 100%;
+    background-position: 0 -100px;
 }

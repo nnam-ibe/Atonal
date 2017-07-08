@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
-import SearchBar from './SearchBar'
+import SearchBar, { activeType, searchMode } from './SearchBar'
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import '../App.css'
@@ -10,7 +10,7 @@ export default class AppToolbar extends Component {
     constructor(props) {
         super(props);
         this.state  = {
-            activeType: 1
+            activeType: activeType.ARTIST
         }
     }
 
@@ -22,11 +22,11 @@ export default class AppToolbar extends Component {
                                   onChange={this.handleTypeChange}
                                   className="toolbar-dropdown"
                     >
-                        <MenuItem value={1} primaryText="Artist"/>
-                        <MenuItem value={2} primaryText="Album"/>
-                        <MenuItem value={3} primaryText="Tracks"/>
+                        <MenuItem value={activeType.ARTIST} primaryText="Artist"/>
+                        <MenuItem value={activeType.ALBUMS} primaryText="Album"/>
+                        <MenuItem value={activeType.TRACKS} primaryText="Tracks"/>
                     </DropDownMenu>
-                    <SearchBar activeType={this.state.activeType}/>
+                    <SearchBar activeType={this.state.activeType} searchMode={searchMode.LOOKUP}/>
                 </ToolbarGroup>
             </Toolbar>
         )
