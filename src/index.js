@@ -44,7 +44,7 @@ class App extends Component {
 
         if (process.env.NODE_ENV === 'development') {
             spotifyApi = new SpotifyWebApi({
-                accessToken: 'BQDja-fbcICNwKHTWEB6zjyd2bwy_uAjhdBdMmlU1RRGaAnETRQDgwhMtMEBEf5eoA-uLwCWYnzgBXcYd4Ymtg'
+                accessToken: 'BQDxXay6VZ6cOrhmoLLtjFzFt0Udq5Ih5GQZDPUGAso1UHcjdAu0vxPNqDneK8t9xw0Z7-mw2G6fbi4FkX-OQA'
             });
         } else{
             fetch(url, {mode: 'cors'})
