@@ -3,11 +3,11 @@ var app = express();
 var http = require("http");
 var cors = require('cors');
 var SpotifyWebApi = require("spotify-web-api-node");
-var config = require('./spotifyConfig');
+var spotifyConfig = require('./src/Configurations/spotifyConfig');
 
 var spotifyApi = new SpotifyWebApi({
-    clientId : config.clientId,
-    clientSecret : config.clientSecret
+    clientId : spotifyConfig.secrets.clientId,
+    clientSecret : spotifyConfig.secrets.clientSecret
 });
 
 process.env.NODE_ENV = 'ddevelopment';
@@ -22,6 +22,7 @@ app.get('/', function(request, response) {
 });
 
 app.get('/access_token', function(req, res) {
+    console.log('/access_token is called');
     spotifyApi.clientCredentialsGrant()
         .then(function(data) {
             console.log('The access token expires in ' + data.body['expires_in']);

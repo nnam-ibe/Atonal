@@ -37,26 +37,34 @@ class App extends Component {
     }
 
     componentWillMount() {
-        var url = 'http://192.168.0.14:9999/access_token';
-        if (process.env.NODE_ENV === 'production') {
-            url = 'https://blooming-escarpment-43988.herokuapp.com/access_token';
-        }
-
-        if (process.env.NODE_ENV === 'development') {
+        var url = 'https://blooming-escarpment-43988.herokuapp.com/access_token';
+        fetch(url, {mode: 'cors'})
+            .then((response) => {
+                return response.json();
+            }).then((data) => {
             spotifyApi = new SpotifyWebApi({
-                accessToken: 'BQDxXay6VZ6cOrhmoLLtjFzFt0Udq5Ih5GQZDPUGAso1UHcjdAu0vxPNqDneK8t9xw0Z7-mw2G6fbi4FkX-OQA'
+                accessToken: data.access_token
             });
-        } else{
-            fetch(url, {mode: 'cors'})
-                .then((response) => {
-                    return response.json();
-                }).then((data) => {
-                spotifyApi = new SpotifyWebApi({
-                    accessToken: data.access_token
-                });
-                console.log(data.access_token); //TODO: Remove console log
-            });
-        }
+            console.log(data.access_token); //TODO: Remove console log
+        });
+
+
+        // var url = 'http://192.168.0.14:9999/access_token';
+        // if (process.env.NODE_ENV === 'development') {
+        //     spotifyApi = new SpotifyWebApi({
+        //         accessToken: 'BQDxXay6VZ6cOrhmoLLtjFzFt0Udq5Ih5GQZDPUGAso1UHcjdAu0vxPNqDneK8t9xw0Z7-mw2G6fbi4FkX-OQA'
+        //     });
+        // } else {
+        //     fetch(url, {mode: 'cors'})
+        //         .then((response) => {
+        //             return response.json();
+        //         }).then((data) => {
+        //         spotifyApi = new SpotifyWebApi({
+        //             accessToken: data.access_token
+        //         });
+        //         console.log(data.access_token); //TODO: Remove console log
+        //     });
+        // }
     }
 
 }
