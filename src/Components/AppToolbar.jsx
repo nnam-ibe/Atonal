@@ -23,7 +23,6 @@ export default class AppToolbar extends Component {
                                   className="toolbar-dropdown"
                     >
                         <MenuItem value={activeType.ARTIST} primaryText="Artist"/>
-                        <MenuItem value={activeType.ALBUMS} primaryText="Album"/>
                         <MenuItem value={activeType.TRACKS} primaryText="Tracks"/>
                     </DropDownMenu>
                     <SearchBar activeType={this.state.activeType} searchMode={searchMode.LOOKUP}/>

@@ -9,7 +9,6 @@ import { spotifyApi } from '../index'
 
 export const activeType = Object.freeze({
     ARTIST: 0,
-    ALBUMS: 1,
     TRACKS: 2
 });
 
@@ -56,9 +55,6 @@ class SearchBar extends Component {
             switch (this.props.activeType) {
                 case activeType.ARTIST:
                     this.searchArtists(newValue);
-                    break;
-                case activeType.ALBUMS:
-                    this.searchAlbums(newValue);
                     break;
                 case activeType.TRACKS:
                     this.searchTracks(newValue);
@@ -121,16 +117,6 @@ class SearchBar extends Component {
             }, function (err) {
                 console.error(err);
             });
-    }
-
-    searchAlbums(value) {
-        spotifyApi.searchAlbums(value).then((data) => {
-            console.log(`Search for Album: ${value}`, data);
-            // var result = _.map(data.body.a)
-            this.setState({
-                data: []
-            });
-        });
     }
 
     searchTracks(value) {

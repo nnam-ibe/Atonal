@@ -106,17 +106,45 @@ body {
     height: 240px;
 }
 
-.compare-artist1 {
+.compare-artist {
     background-size: cover;
     width: 50%;
     height: 100%;
     background-position: 0 -100px;
-
 }
 
-.compare-artist2 {
-    background-size: cover;
-    width: 50%;
-    height: 100%;
-    background-position: 0 -100px;
+.compare-component-body {
+    display: flex;
+}
+
+.compare-collab-list {
+    overflow: scroll;
+    height: 270px;
+}
+
+.compare-collab-item-div {
+    text-align: left;
+    display: inline;
+    padding: 20px;
+}
+
+.compare-versus-list {
+    display: table;
+    width: 100%;
+}
+
+.compare-versus-item-row {
+    width: 100%;
+    display: table-row;
+}
+
+.compare-versus-item {
+    display: table-cell;
+}
+
+.compare-versus-item-header {
+    display: table-cell;
+    font-size: 1.2em;
+    font-style: italic;
+    text-transform: uppercase;
 }

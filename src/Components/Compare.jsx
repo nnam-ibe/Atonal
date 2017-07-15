@@ -6,7 +6,7 @@ import { spotifyApi } from '../index'
 import '../App.css'
 
 const paperStyle = {
-    height: 150,
+    height: 350,
     width: '50%',
     margin: 5,
     textAlign: 'center',
@@ -43,11 +43,11 @@ export default class Compare extends  Component {
                 <div className="compare-component">
                     <div className="compare-component-header">
                         <header className="compare-header">
-                            <div className="compare-artist1" style={{backgroundImage: 'url('+ this.state.artist1.url + ')'}}>
+                            <div className="compare-artist" style={{backgroundImage: 'url('+ this.state.artist1.url + ')'}}>
                                 <span className="followers">{this.state.artist1.followers}</span>
                                 <h1 className="artist-name">{this.state.artist1.name}</h1>
                             </div>
-                            <div className="compare-artist2" style={{backgroundImage: 'url('+ this.state.artist2.url + ')'}}>
+                            <div className="compare-artist" style={{backgroundImage: 'url('+ this.state.artist2.url + ')'}}>
                                 <span className="followers">{this.state.artist2.followers}</span>
                                 <h1 className="artist-name">{this.state.artist2.name}</h1>
                             </div>
@@ -55,7 +55,16 @@ export default class Compare extends  Component {
                     </div>
                     <div className="compare-component-body">
                         <Paper style={paperStyle}>
-                            <h1>HI</h1>
+                            <div className="compare-collabs-wrapper">
+                                <h1 className="compare-collab-header">Collaborations</h1>
+                                <ol className="compare-collab-list">{this.state.collaborations.tracklist}</ol>
+                            </div>
+                        </Paper>
+                        <Paper style={paperStyle}>
+                            <div className="compare-versus-wrapper">
+                                <h1 className="compare-versus-header">{this.state.artist1.name + " vs. " + this.state.artist2.name}</h1>
+                                <div className="compare-versus-list">{this.state.versus}</div>
+                            </div>
                         </Paper>
                     </div>
                 </div>
@@ -67,7 +76,6 @@ export default class Compare extends  Component {
 
     fetchPageData(props) {
         this.fetchHeader(props);
-        // this.fetchCollaborations(props);
     }
 
     fetchHeader(props) {
@@ -104,7 +112,8 @@ export default class Compare extends  Component {
                     artist2: artist2,
                 });
 
-                this.fetchCollaborations(artist1.name + ' ' + artist2.name)
+                this.displayVersus(data.body.artists[0], data.body.artists[1]);
+                this.fetchCollaborations(artist1.name + ' ' + artist2.name);
             })
     }
 
@@ -122,6 +131,7 @@ export default class Compare extends  Component {
                         ids: _.map(item.artists, (artist) => {
                             return artist.id;
                         }),
+                        id: item.id,
                     };
 
                     if ( _.includes(track.ids, this.props.match.params.artist1)
@@ -134,6 +144,16 @@ export default class Compare extends  Component {
                 tracklist = _.pickBy(tracklist, _.identity);
                 console.log(tracklist); //TODO: Remove console log
 
+                tracklist = _.map(tracklist, (track) => {
+                   return (
+                       <div key={track.id} className="compare-collab-item-div">
+                           <li className="compare-collab-row">
+                               <span>{track.name}</span>
+                           </li>
+                       </div>
+                   )
+                });
+
                 this.setState({
                     collaborations: {
                         loading: false,
@@ -141,5 +161,21 @@ export default class Compare extends  Component {
                     },
                 })
             });
+    }
+
+    displayVersus(artist1, artist2) {
+        var followers = (
+            <div className="compare-versus-item-row">
+                <div className="compare-versus-item">{artist1.followers.total}</div>
+                <div className="compare-versus-item-header">Followers</div>
+                <div className="compare-versus-item">{artist2.followers.total}</div>
+            </div>
+        );
+
+        // var
+
+        this.setState({
+            versus: followers
+        })
     }
 }
