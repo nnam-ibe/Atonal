@@ -38,6 +38,7 @@ class App extends Component {
 
     componentWillMount() {
         var url = 'https://blooming-escarpment-43988.herokuapp.com/access_token';
+        // var url = 'http://192.168.0.11:9999/access_token';
         fetch(url, {mode: 'cors'})
             .then((response) => {
                 return response.json();

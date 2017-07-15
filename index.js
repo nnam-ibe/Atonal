@@ -10,6 +10,10 @@ var spotifyApi = new SpotifyWebApi({
     clientSecret : spotifyConfig.secrets.clientSecret
 });
 
+var access_token;
+var token_valid;
+var expiresIn;
+
 process.env.NODE_ENV = 'ddevelopment';
 
 app.set('port', (process.env.PORT || 9999));
@@ -23,20 +27,35 @@ app.get('/', function(request, response) {
 
 app.get('/access_token', function(req, res) {
     console.log('/access_token is called');
-    spotifyApi.clientCredentialsGrant()
-        .then(function(data) {
-            console.log('The access token expires in ' + data.body['expires_in']);
-            console.log('The access token is ' + data.body['access_token']);
-            // Save the access token so that it's used in future calls
-            spotifyApi.setAccessToken(data.body['access_token']);
-            response = {
-                access_token: data.body['access_token']
-            };
+    console.log(access_token);
 
-            res.send(JSON.stringify(response));
-        }, function(err) {
-            console.log('Something went wrong when retrieving an access token', err.message);
-        });
+    if (!access_token || !expiresIn || (new Date().getTime() > expiresIn) ) {
+        spotifyApi.clientCredentialsGrant()
+            .then(function(data) {
+                expiresIn = new Date().getTime() + ( data.body['expires_in'] * 1000 );
+                console.log('The access token expires in ' + expiresIn);
+                console.log('Current time ' + new Date().getTime());
+                console.log('The access token is ' + data.body['access_token']);
+
+                // Save the access token so that it's used in future calls
+                access_token = data.body['access_token'];
+                spotifyApi.setAccessToken(access_token);
+                response = {
+                    access_token: access_token
+                };
+                res.send(JSON.stringify(response));
+            }, function(err) {
+                console.log('Something went wrong when retrieving an access token', err.message);
+            });
+    } else {
+        // Save the access token so that it's used in future calls
+        spotifyApi.setAccessToken(access_token);
+        response = {
+            access_token: access_token
+        };
+        res.send(JSON.stringify(response));
+    }
+
 });
 
 app.listen(app.get('port'), function() {
