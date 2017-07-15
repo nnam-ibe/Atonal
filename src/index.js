@@ -37,34 +37,34 @@ class App extends Component {
     }
 
     componentWillMount() {
-        // var url = 'https://blooming-escarpment-43988.herokuapp.com/access_token';
-        // fetch(url, {mode: 'cors'})
-        //     .then((response) => {
-        //         return response.json();
-        //     }).then((data) => {
-        //     spotifyApi = new SpotifyWebApi({
-        //         accessToken: data.access_token
-        //     });
-        //     console.log(data.access_token); //TODO: Remove console log
-        // });
-
-
-        var url = 'http://192.168.0.14:9999/access_token';
-        if (process.env.NODE_ENV === 'development') {
+        var url = 'https://blooming-escarpment-43988.herokuapp.com/access_token';
+        fetch(url, {mode: 'cors'})
+            .then((response) => {
+                return response.json();
+            }).then((data) => {
             spotifyApi = new SpotifyWebApi({
-                accessToken: 'BQBA4-9QwasfFgJy5KRNEESf_ygxxZZnKH3gUwlulPlVaJ_JESQTW_KVVjWGWZFJr_2VnrhKFS3M1tRFZShqug'
+                accessToken: data.access_token
             });
-        } else {
-            fetch(url, {mode: 'cors'})
-                .then((response) => {
-                    return response.json();
-                }).then((data) => {
-                spotifyApi = new SpotifyWebApi({
-                    accessToken: data.access_token
-                });
-                console.log(data.access_token); //TODO: Remove console log
-            });
-        }
+            console.log(data.access_token); //TODO: Remove console log
+        });
+
+
+        // var url = 'http://192.168.0.14:9999/access_token';
+        // if (process.env.NODE_ENV === 'development') {
+        //     spotifyApi = new SpotifyWebApi({
+        //         accessToken: 'BQBA4-9QwasfFgJy5KRNEESf_ygxxZZnKH3gUwlulPlVaJ_JESQTW_KVVjWGWZFJr_2VnrhKFS3M1tRFZShqug'
+        //     });
+        // } else {
+        //     fetch(url, {mode: 'cors'})
+        //         .then((response) => {
+        //             return response.json();
+        //         }).then((data) => {
+        //         spotifyApi = new SpotifyWebApi({
+        //             accessToken: data.access_token
+        //         });
+        //         console.log(data.access_token); //TODO: Remove console log
+        //     });
+        // }
     }
 
 }
